@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.target=BerkasPendaftaran
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ BerkasPendaftaran\ here.\r\n\r\n\ @author\ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=formulirPendaftaranWisuda\ formulirBiodataMahasiswa\ formulirPermohonanBebasPustaka\ formulirBebasLaboratorium\ formulirSuratIkutSertaWisuda\ formulirDokumenWisuda\ formulirPenyerahanKaryaIlmiah
+comment1.target=BerkasPendaftaran(java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String)
+comment2.params=namaMahasiswa
+comment2.target=void\ displayBerkasPendaftaran(java.lang.String)
+numComments=3
