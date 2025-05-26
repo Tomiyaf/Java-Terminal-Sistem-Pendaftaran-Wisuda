@@ -9,7 +9,7 @@ public class PendaftaranWisuda {
     List<Admin> daftarAdmin = new ArrayList<>();
     List<Mahasiswa> daftarMahasiswaWisuda = new ArrayList<>();
     private int pilihan;
-
+    private int opsi;
     public void main(String[] args) {
         mainFunction();
     }
@@ -57,7 +57,7 @@ public class PendaftaranWisuda {
             }
 
             // Setelah user selesai dari menuAdmin/menuMahasiswa, tanya apakah ingin logout
-            System.out.print("Apakah Anda ingin keluar dari sistem? (Y/N): ");
+            System.out.print("Apakah Anda ingin Logout? (Y/N): ");
             String keluar = scanner.nextLine();
             if (keluar.equalsIgnoreCase("Y")) {
                 running = false;
@@ -100,11 +100,12 @@ public class PendaftaranWisuda {
     }
 
     public void menuMahasiswa(Scanner scanner) {
+        do{
         System.out.println("Silahkan Pilih Opsi : ");
         System.out.println("1. Tambahkan Berkas Pendaftaran Wisuda.");
         System.out.println("2. Lihat Status Pendaftaran Wisuda");
         System.out.println("3. Keluar");
-        int opsi = scanner.nextInt();
+        opsi = scanner.nextInt();
         scanner.nextLine();
         switch(opsi){
             case 1 : 
@@ -119,10 +120,11 @@ public class PendaftaranWisuda {
             default :
                 System.out.println("Pilihan tidak tersedia");
         }
-    }
+    }while(opsi != 3);
+}
     
     public void tambahBerkasPendaftaran(){
-    System.out.println("Masukan Nama Mahasiswa : ");
+    System.out.println("Masukan Nama Anda : ");
     String namaMahasiswa = scanner.nextLine();
     System.out.println("Masukan Formulir Pendaftaran Wisuda : ");
     String formulirPendaftaranWisuda = scanner.nextLine();
@@ -150,7 +152,7 @@ public class PendaftaranWisuda {
     }
 
     public void lihatStatusPendaftaran(){
-    System.out.print("Masukan Nama Mahasiswa : ");
+    System.out.print("Masukan Nama Anda : ");
     String namaMahasiswa = scanner.nextLine();
     Mahasiswa mahasiswa = cariMahasiswaByNama(namaMahasiswa);
     mahasiswa.displayStatusPendaftaran(mahasiswa);
@@ -281,17 +283,23 @@ public class PendaftaranWisuda {
         daftarUsers.add(user);
     }
 
-    public void setMahasiswa(Users user) {
-        if (user instanceof Mahasiswa) {
-            daftarMahasiswa.add((Mahasiswa) user);
+public void setMahasiswa(Users user) {
+    if (user instanceof Mahasiswa) {
+        Mahasiswa mahasiswa = (Mahasiswa) user;
+        if (!daftarMahasiswa.contains(mahasiswa)) {
+            daftarMahasiswa.add(mahasiswa);
         }
     }
+}
 
-    public void setAdmin(Users user) {
-        if (user instanceof Admin) {
-            daftarAdmin.add((Admin) user);
+public void setAdmin(Users user) {
+    if (user instanceof Admin) {
+        Admin admin = (Admin) user;
+        if (!daftarAdmin.contains(admin)) {
+            daftarAdmin.add(admin);
         }
     }
+}
 
     public void displayBerkasMahasiswa(Mahasiswa mahasiswa) {
         mahasiswa.displayBerkas();
