@@ -15,6 +15,7 @@ public class Mahasiswa extends Users
     private String fakultas;
     private int angkatan;
     private BerkasPendaftaran berkas;
+    private StatusPendaftaran status = StatusPendaftaran.DIPROSES;
     public Mahasiswa(String username,
     String password,
     Role role,
@@ -52,19 +53,23 @@ public class Mahasiswa extends Users
     System.out.println("Nama Lengkap : " + nama);
     System.out.println("NPM Mahasiswa : " + NPM);
     System.out.println("Email Mahasiswa : " + email);
-    System.out.println(noHp);
-    System.out.println(programStudi);
-    System.out.println(fakultas);
-    System.out.println(angkatan + "\n");
+    System.out.println("No HP Mahasiswa : " + noHp);
+    System.out.println("Program Studi : " + programStudi);
+    System.out.println("Fakultas : " + fakultas);
+    System.out.println("Angkatan : " + angkatan + "\n");
+
     System.out.print("Tampilkan Berkas Pendaftaran (Y/N) : ");
     String nilaiInput = scanner.nextLine();
-    if(nilaiInput == "Y" || nilaiInput == "y"){
-    displayBerkas();
+
+    if(nilaiInput.equalsIgnoreCase("Y")){
+        displayBerkas();
     }
-    }
+}
     
-    public void displayStatusPendaftaran(Admin adm, Mahasiswa mhs, StatusPendaftaran status){
-    System.out.println("Status Pendaftaran : Mahasiswa" + mhs + " " + status + " oleh Admin " + adm);
+    public void setStatusPendaftaran(Admin adm, Mahasiswa mhs, StatusPendaftaran status){
+    this.status = status;
+    System.out.println("Status pendaftaran mahasiswa " + mhs.getNama() + " telah diubah menjadi: " + status);
     }
+
     
 }
