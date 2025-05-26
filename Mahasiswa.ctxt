@@ -13,4 +13,6 @@ comment5.params=scanner
 comment5.target=void\ displayDataMahasiswa(java.util.Scanner)
 comment6.params=adm\ mhs\ status
 comment6.target=void\ setStatusPendaftaran(Admin,\ Mahasiswa,\ StatusPendaftaran)
-numComments=7
+comment7.params=mhs
+comment7.target=void\ displayStatusPendaftaran(Mahasiswa)
+numComments=8

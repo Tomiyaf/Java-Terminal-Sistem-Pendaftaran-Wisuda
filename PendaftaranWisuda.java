@@ -102,14 +102,18 @@ public class PendaftaranWisuda {
     public void menuMahasiswa(Scanner scanner) {
         System.out.println("Silahkan Pilih Opsi : ");
         System.out.println("1. Tambahkan Berkas Pendaftaran Wisuda.");
-        System.out.println("2. Keluar");
+        System.out.println("2. Lihat Status Pendaftaran Wisuda");
+        System.out.println("3. Keluar");
         int opsi = scanner.nextInt();
         scanner.nextLine();
         switch(opsi){
             case 1 : 
-                tambahBerkasPendaftaran(scanner);
+                tambahBerkasPendaftaran();
                 break;
             case 2 :
+                lihatStatusPendaftaran();
+                break;
+            case 3 :
                 System.out.println("... Keluar Dari Sistem");
                 break;
             default :
@@ -117,7 +121,7 @@ public class PendaftaranWisuda {
         }
     }
     
-    public void tambahBerkasPendaftaran(Scanner scanner){
+    public void tambahBerkasPendaftaran(){
     System.out.println("Masukan Nama Mahasiswa : ");
     String namaMahasiswa = scanner.nextLine();
     System.out.println("Masukan Formulir Pendaftaran Wisuda : ");
@@ -145,6 +149,13 @@ public class PendaftaranWisuda {
     cariMahasiswaByNama(namaMahasiswa).setBerkasMahasiswa(berkas);
     }
 
+    public void lihatStatusPendaftaran(){
+    System.out.print("Masukan Nama Mahasiswa : ");
+    String namaMahasiswa = scanner.nextLine();
+    Mahasiswa mahasiswa = cariMahasiswaByNama(namaMahasiswa);
+    mahasiswa.displayStatusPendaftaran(mahasiswa);
+    }
+    
     public void menuAdmin() {
         do {
             System.out.println("\nSilahkan Pilih Opsi : ");
@@ -180,7 +191,7 @@ public class PendaftaranWisuda {
                         break;
 
                     case 4:
-                        System.out.print("Masukan Nama Admin: ");
+                        System.out.print("Masukan Nama Anda: ");
                         String namaAdmin = scanner.nextLine();
                         Admin adm = cariAdminByNama(namaAdmin);
                         if (adm == null) {
@@ -201,6 +212,11 @@ public class PendaftaranWisuda {
                         try {
                             StatusPendaftaran status = StatusPendaftaran.valueOf(statusInput.toUpperCase());
                             mhs1.setStatusPendaftaran(adm, mhs1, status);
+                            if(status == StatusPendaftaran.DITERIMA){
+                             daftarMahasiswaWisuda.add(mhs1);
+                            System.out.println("Mahasiswa berhasil ditambahkan ke daftar wisuda.");
+
+                            }
                         } catch (IllegalArgumentException e) {
                             System.out.println("Status tidak valid.");
                         }
@@ -228,18 +244,25 @@ public class PendaftaranWisuda {
     }
 
     public void displayDaftarMahasiswaWisuda() {
+    if(daftarMahasiswaWisuda != null){
         System.out.println("Daftar Nama Mahasiswa Wisuda:");
         for (Mahasiswa mahasiswa : daftarMahasiswaWisuda) {
-            System.out.println(mahasiswa.getNama());
-        }
+        System.out.println(mahasiswa.getNama());
+        } 
+    } else {
+        System.out.println("Data Mahasiswa Wisuda Tidak Tersedia");
+    }
     }
 
     public Mahasiswa cariMahasiswaByNama(String nama) {
         for (Mahasiswa mhs : daftarMahasiswa) {
             if (mhs.getNama().equalsIgnoreCase(nama)) {
                 return mhs;
+            } else {
+            System.out.println("Mahasiswa tidak ditemukan!");
             }
         }
+        
         return null;
     }
 
@@ -247,6 +270,8 @@ public class PendaftaranWisuda {
         for (Admin adm : daftarAdmin) {
             if (adm.getNama().equalsIgnoreCase(nama)) {
                 return adm;
+            }else {
+            System.out.println("Admin tidak ditemukan!");
             }
         }
         return null;

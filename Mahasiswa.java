@@ -15,7 +15,7 @@ public class Mahasiswa extends Users
     private String fakultas;
     private int angkatan;
     private BerkasPendaftaran berkas;
-    private StatusPendaftaran status = StatusPendaftaran.DIPROSES;
+    private StatusPendaftaran status = null;
     public Mahasiswa(String username,
     String password,
     Role role,
@@ -45,7 +45,11 @@ public class Mahasiswa extends Users
     }
     
     public void displayBerkas(){
-    berkas.displayBerkasPendaftaran(this.nama);
+    if (berkas != null) {
+        berkas.displayBerkasPendaftaran(this.nama);
+    } else {
+        System.out.println("Berkas belum diisi.");
+    }
     }
     
     public void displayDataMahasiswa(Scanner scanner){
@@ -68,8 +72,15 @@ public class Mahasiswa extends Users
     
     public void setStatusPendaftaran(Admin adm, Mahasiswa mhs, StatusPendaftaran status){
     this.status = status;
-    System.out.println("Status pendaftaran mahasiswa " + mhs.getNama() + " telah diubah menjadi: " + status);
+    displayStatusPendaftaran(mhs);
     }
 
+    public void displayStatusPendaftaran(Mahasiswa mhs){
+    if(this.status == null){
+    System.out.println("Maaf, Berkas anda kosong / Admin belum verifikasi berkas Anda");
+    } else {
+    System.out.println("Status pendaftaran mahasiswa " + mhs.getNama() + " telah diubah menjadi: " + this.status);
+    }
+    }
     
 }
