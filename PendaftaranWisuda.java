@@ -1,6 +1,6 @@
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class PendaftaranWisuda {
     Scanner scanner = new Scanner(System.in);
@@ -31,29 +31,27 @@ public class PendaftaranWisuda {
         String username = scanner.nextLine();
         System.out.print("Password : ");
         String password = scanner.nextLine();
-        System.out.print("🧾 Role (ADMIN / MAHASISWA) : ");
-        String roleInput = scanner.nextLine().toUpperCase();
 
-        Role role;
-        try {
-            role = Role.valueOf(roleInput);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Role tidak valid. Silakan coba lagi.");
-            continue;
+        Users loggedInUser = null;
+        // Cari user di daftarUsers
+        for (Users user : daftarUsers) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                loggedInUser = user;
+                break;
+            }
         }
 
-        if (loginUsers(username, password, role)) {
+        if (loggedInUser != null) {
             System.out.println("Selamat Datang " + username);
-            Users loggedInUser = getUser(username, password, role);
 
-            if (role == Role.ADMIN) {
-                setAdmin(loggedInUser);
+            if (loggedInUser instanceof Admin) {
                 System.out.println("Login sebagai Admin.");
-                menuAdmin();
-            } else if (role == Role.MAHASISWA) {
-                setMahasiswa(loggedInUser);
+                menuAdmin((Admin) loggedInUser);
+            } else if (loggedInUser instanceof Mahasiswa) {
                 System.out.println("Login sebagai Mahasiswa.");
-                menuMahasiswa(scanner);
+                menuMahasiswa((Mahasiswa) loggedInUser);
+            } else {
+                System.out.println("Role tidak dikenali.");
             }
 
             // Setelah user selesai dari menuAdmin/menuMahasiswa, tanya apakah ingin logout
@@ -99,66 +97,61 @@ public class PendaftaranWisuda {
         return null;
     }
 
-    public void menuMahasiswa(Scanner scanner) {
-        do{
-        System.out.println("Silahkan Pilih Opsi : ");
-        System.out.println("1. Tambahkan Berkas Pendaftaran Wisuda.");
-        System.out.println("2. Lihat Status Pendaftaran Wisuda");
-        System.out.println("3. Keluar");
-        opsi = scanner.nextInt();
-        scanner.nextLine();
-        switch(opsi){
-            case 1 : 
-                tambahBerkasPendaftaran();
-                break;
-            case 2 :
-                lihatStatusPendaftaran();
-                break;
-            case 3 :
-                System.out.println("... Keluar Dari Sistem");
-                break;
-            default :
-                System.out.println("Pilihan tidak tersedia");
-        }
-    }while(opsi != 3);
-}
+    public void menuMahasiswa(Mahasiswa mahasiswa) {
+        do {
+            System.out.println("Silahkan Pilih Opsi : ");
+            System.out.println("1. Tambahkan Berkas Pendaftaran Wisuda.");
+            System.out.println("2. Lihat Status Pendaftaran Wisuda");
+            System.out.println("3. Keluar");
+            opsi = scanner.nextInt();
+            scanner.nextLine();
+            switch(opsi){
+                case 1 : 
+                    tambahBerkasPendaftaran(mahasiswa);
+                    break;
+                case 2 :
+                    lihatStatusPendaftaran(mahasiswa);
+                    break;
+                case 3 :
+                    System.out.println("... Keluar Dari Sistem");
+                    break;
+                default :
+                    System.out.println("Pilihan tidak tersedia");
+            }
+        } while(opsi != 3);
+    }
     
-    public void tambahBerkasPendaftaran(){
-    System.out.println("Masukan Nama Anda : ");
-    String namaMahasiswa = scanner.nextLine();
-    System.out.println("Masukan Formulir Pendaftaran Wisuda : ");
-    String formulirPendaftaranWisuda = scanner.nextLine();
-    System.out.println("Masukan Formulir Biodata Mahasiswa : ");
-    String formulirBiodataMahasiswa = scanner.nextLine();
-    System.out.println("Masukan Formulir Permohonan Bebas Pustaka : ");
-    String formulirPermohonanBebasPustaka = scanner.nextLine();
-    System.out.println("Masukan Formulir Permohonan Bebas Laboratorium : ");
-    String formulirBebasLaboratorium = scanner.nextLine();
-    System.out.println("Masukan Formulir Surat Ikut Serta Wisuda : ");
-    String formulirSuratIkutSertaWisuda = scanner.nextLine();
-    System.out.println("Masukan Formulir Dokumen Wisuda : ");
-    String formulirDokumenWisuda = scanner.nextLine();
-    System.out.println("Masukan Formulir Penyerahan Karya Ilmiah : ");
-    String formulirPenyerahanKaryaIlmiah = scanner.nextLine();
-    BerkasPendaftaran berkas = new BerkasPendaftaran(
-   formulirPendaftaranWisuda,
-   formulirBiodataMahasiswa,
-   formulirPermohonanBebasPustaka,
-   formulirBebasLaboratorium,
-   formulirSuratIkutSertaWisuda,
-   formulirDokumenWisuda,
-   formulirPenyerahanKaryaIlmiah);
-    cariMahasiswaByNama(namaMahasiswa).setBerkasMahasiswa(berkas);
+    public void tambahBerkasPendaftaran(Mahasiswa mahasiswa){
+        System.out.println("Masukan Formulir Pendaftaran Wisuda : ");
+        String formulirPendaftaranWisuda = scanner.nextLine();
+        System.out.println("Masukan Formulir Biodata Mahasiswa : ");
+        String formulirBiodataMahasiswa = scanner.nextLine();
+        System.out.println("Masukan Formulir Permohonan Bebas Pustaka : ");
+        String formulirPermohonanBebasPustaka = scanner.nextLine();
+        System.out.println("Masukan Formulir Permohonan Bebas Laboratorium : ");
+        String formulirBebasLaboratorium = scanner.nextLine();
+        System.out.println("Masukan Formulir Surat Ikut Serta Wisuda : ");
+        String formulirSuratIkutSertaWisuda = scanner.nextLine();
+        System.out.println("Masukan Formulir Dokumen Wisuda : ");
+        String formulirDokumenWisuda = scanner.nextLine();
+        System.out.println("Masukan Formulir Penyerahan Karya Ilmiah : ");
+        String formulirPenyerahanKaryaIlmiah = scanner.nextLine();
+        BerkasPendaftaran berkas = new BerkasPendaftaran(
+            formulirPendaftaranWisuda,
+            formulirBiodataMahasiswa,
+            formulirPermohonanBebasPustaka,
+            formulirBebasLaboratorium,
+            formulirSuratIkutSertaWisuda,
+            formulirDokumenWisuda,
+            formulirPenyerahanKaryaIlmiah);
+        mahasiswa.setBerkasMahasiswa(berkas);
     }
 
-    public void lihatStatusPendaftaran(){
-    System.out.print("Masukan Nama Anda : ");
-    String namaMahasiswa = scanner.nextLine();
-    Mahasiswa mahasiswa = cariMahasiswaByNama(namaMahasiswa);
-    mahasiswa.displayStatusPendaftaran(mahasiswa);
+    public void lihatStatusPendaftaran(Mahasiswa mahasiswa){
+        mahasiswa.displayStatusPendaftaran(mahasiswa);
     }
     
-    public void menuAdmin() {
+    public void menuAdmin(Admin adminLogin) {
         do {
             System.out.println("\nSilahkan Pilih Opsi : ");
             System.out.println("1. Lihat Daftar Mahasiswa.");
@@ -193,14 +186,6 @@ public class PendaftaranWisuda {
                         break;
 
                     case 4:
-                        System.out.print("Masukan Nama Anda: ");
-                        String namaAdmin = scanner.nextLine();
-                        Admin adm = cariAdminByNama(namaAdmin);
-                        if (adm == null) {
-                            System.out.println("Admin tidak ditemukan.");
-                            break;
-                        }
-
                         System.out.print("Masukan Nama Mahasiswa: ");
                         String namaMahasiswa = scanner.nextLine();
                         Mahasiswa mhs1 = cariMahasiswaByNama(namaMahasiswa);
@@ -213,11 +198,10 @@ public class PendaftaranWisuda {
                         String statusInput = scanner.nextLine();
                         try {
                             StatusPendaftaran status = StatusPendaftaran.valueOf(statusInput.toUpperCase());
-                            mhs1.setStatusPendaftaran(adm, mhs1, status);
+                            mhs1.setStatusPendaftaran(adminLogin, mhs1, status);
                             if(status == StatusPendaftaran.DITERIMA){
-                             daftarMahasiswaWisuda.add(mhs1);
-                            System.out.println("Mahasiswa berhasil ditambahkan ke daftar wisuda.");
-
+                                daftarMahasiswaWisuda.add(mhs1);
+                                System.out.println("Mahasiswa berhasil ditambahkan ke daftar wisuda.");
                             }
                         } catch (IllegalArgumentException e) {
                             System.out.println("Status tidak valid.");
@@ -304,4 +288,31 @@ public void setAdmin(Users user) {
     public void displayBerkasMahasiswa(Mahasiswa mahasiswa) {
         mahasiswa.displayBerkas();
     }
+    
+    public void initializeUsers(){
+    // Contoh data dummy
+    Mahasiswa mhs1 = new Mahasiswa("mahasiswa1", "pass123", Role.MAHASISWA, 
+                                  "1234567", "John Doe", "john@email.com", 
+                                  "08123456789", "Teknik Informatika", 
+                                  "Teknik", 2020);
+    registerUser(mhs1);
+    
+    Admin admin1 = new Admin("admin1", "admin123", Role.ADMIN, "Admin Satu", "123", "email", "0897");
+    registerUser(admin1);
+    }
+
+    public void registerUser(Users user) {
+    if (!daftarUsers.contains(user)) {
+        daftarUsers.add(user);
+    }
+    if (user instanceof Mahasiswa mahasiswa) {
+        if (!daftarMahasiswa.contains(mahasiswa)) {
+            daftarMahasiswa.add(mahasiswa);
+        }
+    } else if (user instanceof Admin admin) {
+        if (!daftarAdmin.contains(admin)) {
+            daftarAdmin.add(admin);
+        }
+    }
+}
 }
